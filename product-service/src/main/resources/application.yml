@@ -1,0 +1,18 @@
+
+server:
+  port: 8080
+spring:
+  application:
+    name: productService
+  datasource:
+    url: jdbc:mysql://localhost:3306/onlineShoppingMicroservice/productService
+    password: Adewole171200
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+jwt:
+  secret:  I+dRr1FMR1wzU+rW+FefJX4h8T8eRb+UP8fFX/LAxit3v7IsF6WwLA6/nAAU931xO7P/+y9j0Wjku0LtVIEmdw==
+  expiration-time: 8640000
