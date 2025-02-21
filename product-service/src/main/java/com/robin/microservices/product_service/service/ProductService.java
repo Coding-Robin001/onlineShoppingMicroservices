@@ -12,19 +12,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class ProductService {
     private final ProductRepository productRepository;
 
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
     public ProductResponseDTO createProduct(ProductRequestDTO productDTO) {
-        ProductModel product = ProductModel.builder()
-                .name(productDTO.name())
-                .description(productDTO.description())
-                .price(productDTO.price())
-                .build();
+        ProductModel product = new ProductModel();
+        product.setName(productDTO.name());
+        product.setDescription(productDTO.description());
+        product.setPrice(productDTO.price());
+
         productRepository.save(product);
-        log.info("product created succesffuly");
+//        log.info("product created successfully");
         return new ProductResponseDTO(
                 product.getId(),
                 product.getName(),
@@ -35,15 +38,12 @@ public class ProductService {
 
     public List<ProductResponseDTO> getAllProducts() {
         List<ProductModel> products = productRepository.findAll();
-
         return products.stream()
                 .map(product -> new ProductResponseDTO(
                         product.getId(),
                         product.getName(),
                         product.getDescription(),
                         product.getPrice()
-                ))
-                .collect(Collectors.toList());
+                )).collect(Collectors.toList());
     }
-
 }

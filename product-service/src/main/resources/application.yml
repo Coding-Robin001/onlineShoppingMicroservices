@@ -1,18 +1,38 @@
 
 server:
   port: 8080
+
 spring:
   application:
-    name: productService
+    name: product-service
+
   datasource:
-    url: jdbc:mysql://localhost:3306/onlineShoppingMicroservice/productService
-    password: Adewole171200
+    url: jdbc:mysql://localhost:3306/onlineShoppingMicroservice
     username: root
+    password: Adewole171200
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+
+  # Database connection pool settings
+  datasource.hikari:
+    maximum-pool-size: 10
+    minimum-idle: 5
+    idle-timeout: 30000
+    pool-name: HikariPool-ProductService
+
 jwt:
-  secret:  I+dRr1FMR1wzU+rW+FefJX4h8T8eRb+UP8fFX/LAxit3v7IsF6WwLA6/nAAU931xO7P/+y9j0Wjku0LtVIEmdw==
-  expiration-time: 8640000
+  secret: ${JWT_SECRET:I+dRr1FMR1wzU+rW+FefJX4h8T8eRb+UP8fFX/LAxit3v7IsF6WwLA6/nAAU931xO7P/+y9j0Wjku0LtVIEmdw==}
+  expiration-time: 8640000  # Token expiration time (milliseconds)
