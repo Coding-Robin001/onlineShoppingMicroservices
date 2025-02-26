@@ -14,8 +14,7 @@ public class InventoryModel {
 
     public InventoryModel(){}
 
-    public InventoryModel(Long id, String skuCode, Integer quantity) {
-        this.id = id;
+    public InventoryModel( String skuCode, Integer quantity) {
         this.skuCode = skuCode;
         this.quantity = quantity;
     }

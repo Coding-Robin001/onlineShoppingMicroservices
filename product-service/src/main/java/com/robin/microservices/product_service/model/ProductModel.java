@@ -20,7 +20,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "product")
+@Table(name = "product_table")
 public class ProductModel {
 
     @Id
@@ -36,11 +36,9 @@ public class ProductModel {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    // Default constructor
     public ProductModel() {
     }
 
-    // Parameterized constructor
     public ProductModel(Long id, String name, String description, BigDecimal price) {
         this.id = id;
         this.name = name;
@@ -48,7 +46,6 @@ public class ProductModel {
         this.price = price;
     }
 
-    // Getters
     public Long getId() {
         return id;
     }
@@ -65,7 +62,6 @@ public class ProductModel {
         return price;
     }
 
-    // Setters
     public void setId(Long id) {
         this.id = id;
     }
@@ -82,7 +78,6 @@ public class ProductModel {
         this.price = price;
     }
 
-    // toString method (optional, useful for debugging)
     @Override
     public String toString() {
         return "ProductModel{" +
