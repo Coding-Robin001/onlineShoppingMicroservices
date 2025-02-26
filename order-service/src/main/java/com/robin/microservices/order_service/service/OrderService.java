@@ -1,5 +1,6 @@
 package com.robin.microservices.order_service.service;
 
+import com.robin.microservices.order_service.client.InventoryClient;
 import com.robin.microservices.order_service.dto.OrderRequestDTO;
 import com.robin.microservices.order_service.dto.OrderResponseDTO;
 import com.robin.microservices.order_service.model.OrderModel;
@@ -13,27 +14,35 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final InventoryClient inventoryClient;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, InventoryClient inventoryClient) {
         this.orderRepository = orderRepository;
+        this.inventoryClient = inventoryClient;
     }
 
     public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO){
-        OrderModel order = new OrderModel();
-        order.setOrderNumber(UUID.randomUUID().toString());
-        order.setPrice(orderRequestDTO.price());
-        order.setSkuCode(orderRequestDTO.skuCode());
-        order.setQuantity(orderRequestDTO.quantity());
 
-        orderRepository.save(order);
+        var isProductInStock = inventoryClient.isInStock(orderRequestDTO.skuCode(), orderRequestDTO.quantity());
 
-        return new OrderResponseDTO(
-                order.getId(),
-                order.getOrderNumber(),
-                order.getSkuCode(),
-                order.getPrice(),
-                order.getQuantity()
-        );
+        if (isProductInStock){
+            OrderModel order = new OrderModel();
+            order.setOrderNumber(UUID.randomUUID().toString());
+            order.setPrice(orderRequestDTO.price());
+            order.setSkuCode(orderRequestDTO.skuCode());
+            order.setQuantity(orderRequestDTO.quantity());
+
+            orderRepository.save(order);
+            return new OrderResponseDTO(
+                    order.getId(),
+                    order.getOrderNumber(),
+                    order.getSkuCode(),
+                    order.getPrice(),
+                    order.getQuantity()
+            );
+        } else {
+            throw new RuntimeException("product with skuCode " + orderRequestDTO.skuCode() + " is not in stock");
+        }
     }
 
 
