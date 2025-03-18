@@ -19,7 +19,13 @@ public class Route {
                         HandlerFunctions.http("http://localhost:8080")).build();
     }
 
-    
+    @Bean
+    public RouterFunction<ServerResponse> productServiceSwaggerRoute() {
+        return GatewayRouterFunctions.route("swagger_product_service")
+                .route(RequestPredicates.path("/api-docs/product"),
+                        HandlerFunctions.http("http://localhost:8080/v3/api-docs"))
+                .build();
+    }
 
     @Bean
     public RouterFunction<ServerResponse>orderServiceRoute(){
@@ -29,9 +35,27 @@ public class Route {
     }
 
     @Bean
+    public RouterFunction<ServerResponse> orderServiceSwaggerRoute() {
+        return GatewayRouterFunctions.route("swagger_order_service")
+                .route(RequestPredicates.path("/api-docs/order"),
+                        HandlerFunctions.http("http://localhost:8081/v3/api-docs"))
+                .build();
+    }
+
+
+    @Bean
     public RouterFunction<ServerResponse>inventoryServiceRoute(){
         return GatewayRouterFunctions.route("inventory_service")
                 .route(RequestPredicates.path("/api/inventory"),
                         HandlerFunctions.http("http://localhost:8082")).build();
     }
+
+    @Bean
+    public RouterFunction<ServerResponse> inventoryServiceSwaggerRoute() {
+        return GatewayRouterFunctions.route("swagger_inventory_service")
+                .route(RequestPredicates.path("/api-docs/inventory"),
+                        HandlerFunctions.http("http://localhost:8082/v3/api-docs"))
+                .build();
+    }
+
 }
