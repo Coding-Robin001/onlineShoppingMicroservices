@@ -49,3 +49,9 @@ resilience4j:
       defaults:
         timeoutDuration: 3s  # Requests taking longer than 3s will time out
         cancelRunningFuture: true  # Cancels the ongoing request if it times out
+
+
+  product-service-url: http://localhost:8080
+  order-service-url: http://localhost:8081
+  inventory-service-url: http://localhost:8082
+

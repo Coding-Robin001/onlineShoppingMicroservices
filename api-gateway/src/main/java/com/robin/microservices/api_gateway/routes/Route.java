@@ -12,50 +12,28 @@ import org.springframework.web.servlet.function.ServerResponse;
 @Configuration
 public class Route {
 
-    @Bean
-    public RouterFunction<ServerResponse>productServiceRoute(){
-        return GatewayRouterFunctions.route("product_service")
-                .route(RequestPredicates.path("/api/product"),
-                        HandlerFunctions.http("http://localhost:8080")).build();
+        @Bean
+        public RouterFunction<ServerResponse> apiRoutes() {
+            return GatewayRouterFunctions.route("api_gateway")
+                    .route(RequestPredicates.path("/api/product"),
+                            HandlerFunctions.http("http://localhost:8080"))
+                    .route(RequestPredicates.path("/api/order"),
+                            HandlerFunctions.http("http://localhost:8081"))
+                    .route(RequestPredicates.path("/api/inventory"),
+                            HandlerFunctions.http("http://localhost:8082"))
+                    .build();
+        }
+
+        @Bean
+        public RouterFunction<ServerResponse> swaggerRoutes() {
+            return GatewayRouterFunctions.route("swagger_routes")
+                    .route(RequestPredicates.path("/api-docs/product"),
+                            HandlerFunctions.http("http://localhost:8080/v3/api-docs"))
+                    .route(RequestPredicates.path("/api-docs/order"),
+                            HandlerFunctions.http("http://localhost:8081/v3/api-docs"))
+                    .route(RequestPredicates.path("/api-docs/inventory"),
+                            HandlerFunctions.http("http://localhost:8082/v3/api-docs"))
+                    .build();
+        }
     }
 
-    @Bean
-    public RouterFunction<ServerResponse> productServiceSwaggerRoute() {
-        return GatewayRouterFunctions.route("swagger_product_service")
-                .route(RequestPredicates.path("/api-docs/product"),
-                        HandlerFunctions.http("http://localhost:8080/v3/api-docs"))
-                .build();
-    }
-
-    @Bean
-    public RouterFunction<ServerResponse>orderServiceRoute(){
-        return GatewayRouterFunctions.route("order_service")
-                .route(RequestPredicates.path("/api/order"),
-                        HandlerFunctions.http("http://localhost:8081")).build();
-    }
-
-    @Bean
-    public RouterFunction<ServerResponse> orderServiceSwaggerRoute() {
-        return GatewayRouterFunctions.route("swagger_order_service")
-                .route(RequestPredicates.path("/api-docs/order"),
-                        HandlerFunctions.http("http://localhost:8081/v3/api-docs"))
-                .build();
-    }
-
-
-    @Bean
-    public RouterFunction<ServerResponse>inventoryServiceRoute(){
-        return GatewayRouterFunctions.route("inventory_service")
-                .route(RequestPredicates.path("/api/inventory"),
-                        HandlerFunctions.http("http://localhost:8082")).build();
-    }
-
-    @Bean
-    public RouterFunction<ServerResponse> inventoryServiceSwaggerRoute() {
-        return GatewayRouterFunctions.route("swagger_inventory_service")
-                .route(RequestPredicates.path("/api-docs/inventory"),
-                        HandlerFunctions.http("http://localhost:8082/v3/api-docs"))
-                .build();
-    }
-
-}
