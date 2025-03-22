@@ -17,3 +17,35 @@ springdoc:
         url: http://localhost:8083/v3/api-docs
       - name: Inventory Service
         url: http://localhost:8085/v3/api-docs
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+
+resilience4j:
+  circuitbreaker:
+    config:
+      defaults:
+        registerHealthIndicator: true  # Enables Actuator health monitoring
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        slowCallRateThreshold: 30
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
+  timelimiter:
+    config:
+      defaults:
+        timeoutDuration: 3s  # Requests taking longer than 3s will time out
+        cancelRunningFuture: true  # Cancels the ongoing request if it times out
