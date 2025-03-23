@@ -1,26 +1,35 @@
 package com.robin.microservices.api_gateway.routes;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
 import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.function.HandlerFunction;
 import org.springframework.web.servlet.function.RequestPredicates;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 
 @Configuration
-public class Route {
+public class GatewayConfig {
+
+    @Value("${gateway.routes.product}")
+    private String productService;
+
+    @Value("${gateway.routes.order}")
+    private String orderService;
+
+    @Value("${gateway.routes.inventory}")
+    private String inventoryService;
 
         @Bean
         public RouterFunction<ServerResponse> apiRoutes() {
             return GatewayRouterFunctions.route("api_gateway")
                     .route(RequestPredicates.path("/api/product"),
-                            HandlerFunctions.http("http://localhost:8080"))
+                            HandlerFunctions.http(productService))
                     .route(RequestPredicates.path("/api/order"),
-                            HandlerFunctions.http("http://localhost:8081"))
+                            HandlerFunctions.http(orderService))
                     .route(RequestPredicates.path("/api/inventory"),
-                            HandlerFunctions.http("http://localhost:8082"))
+                            HandlerFunctions.http(inventoryService))
                     .build();
         }
 

@@ -51,7 +51,8 @@ resilience4j:
         cancelRunningFuture: true  # Cancels the ongoing request if it times out
 
 
-  product-service-url: http://localhost:8080
-  order-service-url: http://localhost:8081
-  inventory-service-url: http://localhost:8082
-
+  gateway:
+    routes:
+      product: "http://localhost:8083"
+      order: "http://localhost:8084"
+      inventory: "http://localhost:8085"
