@@ -33,6 +33,7 @@ public class GatewayConfig {
                     .build();
         }
 
+
         @Bean
         public RouterFunction<ServerResponse> swaggerRoutes() {
             return GatewayRouterFunctions.route("swagger_routes")
