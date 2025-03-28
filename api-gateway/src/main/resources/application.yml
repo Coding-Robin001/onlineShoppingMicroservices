@@ -4,19 +4,31 @@ server:
 spring:
   application:
     name: onlineShoppingMicroservices-Api-Gateway
+gateway:
+  routes:
+    product: "http://localhost:8083"
+    order: "http://localhost:8084"
+    inventory: "http://localhost:8085"
+
+swagger:
+  routes:
+    product: "http://localhost:8083/v3/api-docs"
+    order: "http://localhost:8084/v3/api-docs"
+    inventory: "http://localhost:8085/v3/api-docs"
 
 springdoc:
   api-docs:
-    path: /api-docs
+    path: "/api-docs"
   swagger-ui:
-    path: /swagger-ui
+    path: "/swagger-ui"
     urls:
-      - name: Order Service
-        url: http://localhost:8084/v3/api-docs
-      - name: Product Service
-        url: http://localhost:8083/v3/api-docs
-      - name: Inventory Service
-        url: http://localhost:8085/v3/api-docs
+      - name: "Order Service"
+        url: "http://localhost:8084/v3/api-docs"
+      - name: "Product Service"
+        url: "http://localhost:8083/v3/api-docs"
+      - name: "Inventory Service"
+        url: "http://localhost:8085/v3/api-docs"
+
 
 management:
   health:
@@ -49,17 +61,3 @@ resilience4j:
       defaults:
         timeoutDuration: 3s  # Requests taking longer than 3s will time out
         cancelRunningFuture: true  # Cancels the ongoing request if it times out
-
-
-  gateway:
-    routes:
-      product: "http://localhost:8083"
-      order: "http://localhost:8084"
-      inventory: "http://localhost:8085"
-
-  swagger:
-    routes:
-      product: http://localhost:8083/v3/api-docs
-      order: http://localhost:8084/v3/api-docs
-      inventory: http://localhost:8085/v3/api-docs
-
