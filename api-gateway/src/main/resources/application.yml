@@ -18,8 +18,10 @@ swagger:
 
 springdoc:
   api-docs:
+    enabled: true
     path: "/api-docs"
   swagger-ui:
+    enabled: true
     path: "/swagger-ui"
     urls:
       - name: "Order Service"
