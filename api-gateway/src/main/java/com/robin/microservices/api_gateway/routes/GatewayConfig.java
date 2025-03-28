@@ -21,6 +21,15 @@ public class GatewayConfig {
     @Value("${gateway.routes.inventory}")
     private String inventoryService;
 
+    @Value("${swagger.routes.product}")
+    private String productDocs;
+
+    @Value("${swagger.routes.order}")
+    private String orderDocs;
+
+    @Value("${swagger.routes.inventory}")
+    private String inventoryDocs;
+
         @Bean
         public RouterFunction<ServerResponse> apiRoutes() {
             return GatewayRouterFunctions.route("api_gateway")
@@ -38,11 +47,11 @@ public class GatewayConfig {
         public RouterFunction<ServerResponse> swaggerRoutes() {
             return GatewayRouterFunctions.route("swagger_routes")
                     .route(RequestPredicates.path("/api-docs/product"),
-                            HandlerFunctions.http("http://localhost:8080/v3/api-docs"))
+                            HandlerFunctions.http(productDocs))
                     .route(RequestPredicates.path("/api-docs/order"),
-                            HandlerFunctions.http("http://localhost:8081/v3/api-docs"))
+                            HandlerFunctions.http(orderDocs))
                     .route(RequestPredicates.path("/api-docs/inventory"),
-                            HandlerFunctions.http("http://localhost:8082/v3/api-docs"))
+                            HandlerFunctions.http(inventoryDocs))
                     .build();
         }
     }

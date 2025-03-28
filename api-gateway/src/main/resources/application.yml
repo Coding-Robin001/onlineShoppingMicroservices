@@ -56,3 +56,10 @@ resilience4j:
       product: "http://localhost:8083"
       order: "http://localhost:8084"
       inventory: "http://localhost:8085"
+
+  swagger:
+    routes:
+      product: http://localhost:8083/v3/api-docs
+      order: http://localhost:8084/v3/api-docs
+      inventory: http://localhost:8085/v3/api-docs
+
