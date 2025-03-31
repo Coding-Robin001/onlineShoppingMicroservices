@@ -1,13 +1,20 @@
 package com.robin.microservices.api_gateway.routes;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.gateway.server.mvc.filter.CircuitBreakerFilterFunctions;
 import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
 import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.RouteMatcher;
 import org.springframework.web.servlet.function.RequestPredicates;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
+import org.springframework.cloud.gateway.server.mvc.filter.CircuitBreakerFilterFunctions;
+
+import java.net.URI;
+
 
 @Configuration
 public class GatewayConfig {
@@ -35,11 +42,27 @@ public class GatewayConfig {
             return GatewayRouterFunctions.route("api_gateway")
                     .route(RequestPredicates.path("/api/product"),
                             HandlerFunctions.http(productService))
+                    .filter(CircuitBreakerFilterFunctions.
+                            circuitBreaker("productServiceCircuitBreaker", URI.
+                                    create("/forward:/fallbackRoute")))
                     .route(RequestPredicates.path("/api/order"),
                             HandlerFunctions.http(orderService))
+                    .filter(CircuitBreakerFilterFunctions.
+                            circuitBreaker("orderServiceCircuitBreaker", URI.
+                                    create("/forward:/fallbackRoute")))
                     .route(RequestPredicates.path("/api/inventory"),
                             HandlerFunctions.http(inventoryService))
+                    .filter(CircuitBreakerFilterFunctions.
+                            circuitBreaker("inventoryServiceCircuitBreaker", URI.
+                                    create("/forward:/fallbackRoute")))
                     .build();
+        }
+
+        @Bean
+        public RouterFunction<ServerResponse> fallbackRoute(){
+            return GatewayRouterFunctions.route("fallbackRoute")
+                    .GET("/fallbackRoute", request -> ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE).
+                            body("Service currently not available, try again later!")).build();
         }
 
 
