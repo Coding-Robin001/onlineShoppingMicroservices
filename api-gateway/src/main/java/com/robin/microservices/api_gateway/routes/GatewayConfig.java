@@ -73,18 +73,43 @@ public class GatewayConfig {
                                 .body("API Documentation is currently unavailable. Please try again later."))
                 .build();
     }
-    
+
+
+//    @Bean
+//        public RouterFunction<ServerResponse> swaggerRoutes() {
+//            return GatewayRouterFunctions.route("swagger_routes")
+//                    .route(RequestPredicates.path("/api-docs/product"),
+//                            HandlerFunctions.http(productDocs))
+//                    .route(RequestPredicates.path("/api-docs/order"),
+//                            HandlerFunctions.http(orderDocs))
+//                    .route(RequestPredicates.path("/api-docs/inventory"),
+//                            HandlerFunctions.http(inventoryDocs))
+//                    .build();
+//        }
 
     @Bean
-        public RouterFunction<ServerResponse> swaggerRoutes() {
-            return GatewayRouterFunctions.route("swagger_routes")
-                    .route(RequestPredicates.path("/api-docs/product"),
-                            HandlerFunctions.http(productDocs))
-                    .route(RequestPredicates.path("/api-docs/order"),
-                            HandlerFunctions.http(orderDocs))
-                    .route(RequestPredicates.path("/api-docs/inventory"),
-                            HandlerFunctions.http(inventoryDocs))
-                    .build();
-        }
+    public RouterFunction<ServerResponse> swaggerRoutes() {
+        return GatewayRouterFunctions.route("swagger_routes")
+                .route(RequestPredicates.path("/api-docs/product"),
+                        HandlerFunctions.http(productDocs))
+                .filter(CircuitBreakerFilterFunctions.
+                        circuitBreaker("swaggerProductCircuitBreaker",
+                                URI.create("forward:/swagger-fallback")))
+
+                .route(RequestPredicates.path("/api-docs/order"),
+                        HandlerFunctions.http(orderDocs))
+                .filter(CircuitBreakerFilterFunctions.
+                        circuitBreaker("swaggerOrderCircuitBreaker",
+                                URI.create("forward:/swagger-fallback")))
+
+                .route(RequestPredicates.path("/api-docs/inventory"),
+                        HandlerFunctions.http(inventoryDocs))
+                .filter(CircuitBreakerFilterFunctions.
+                        circuitBreaker("swaggerInventoryCircuitBreaker",
+                                URI.create("forward:/swagger-fallback")))
+
+                .build();
     }
+
+}
 
