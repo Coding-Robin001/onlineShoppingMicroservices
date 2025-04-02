@@ -44,26 +44,27 @@ public class GatewayConfig {
                             HandlerFunctions.http(productService))
                     .filter(CircuitBreakerFilterFunctions.
                             circuitBreaker("productServiceCircuitBreaker", URI.
-                                    create("/forward:/fallbackRoute")))
+                                    create("forward:/fallbackRoute")))
                     .route(RequestPredicates.path("/api/order"),
                             HandlerFunctions.http(orderService))
                     .filter(CircuitBreakerFilterFunctions.
                             circuitBreaker("orderServiceCircuitBreaker", URI.
-                                    create("/forward:/fallbackRoute")))
+                                    create("forward:/fallbackRoute")))
                     .route(RequestPredicates.path("/api/inventory"),
                             HandlerFunctions.http(inventoryService))
                     .filter(CircuitBreakerFilterFunctions.
                             circuitBreaker("inventoryServiceCircuitBreaker", URI.
-                                    create("/forward:/fallbackRoute")))
+                                    create("forward:/fallbackRoute")))
                     .build();
         }
 
-        @Bean
-        public RouterFunction<ServerResponse> fallbackRoute(){
-            return GatewayRouterFunctions.route("fallbackRoute")
-                    .GET("/fallbackRoute", request -> ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE).
-                            body("Service currently not available, try again later!")).build();
-        }
+    @Bean
+    public RouterFunction<ServerResponse> fallbackRoute() {
+        return GatewayRouterFunctions.route("fallbackRoute")
+                .GET("/fallbackRoute", request ->
+                        ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE)
+                                .body("Service currently not available, try again later!")).build();
+    }
 
 
         @Bean
