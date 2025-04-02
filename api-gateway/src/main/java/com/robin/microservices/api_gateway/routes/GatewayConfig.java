@@ -43,27 +43,35 @@ public class GatewayConfig {
                             HandlerFunctions.http(productService))
                     .filter(CircuitBreakerFilterFunctions.
                             circuitBreaker("productServiceCircuitBreaker", URI.
-                                    create("forward:/fallbackRoute")))
+                                    create("forward:/fallbackProduct")))
                     .route(RequestPredicates.path("/api/order"),
                             HandlerFunctions.http(orderService))
                     .filter(CircuitBreakerFilterFunctions.
                             circuitBreaker("orderServiceCircuitBreaker", URI.
-                                    create("forward:/fallbackRoute")))
+                                    create("forward:/fallbackOrder")))
                     .route(RequestPredicates.path("/api/inventory"),
                             HandlerFunctions.http(inventoryService))
                     .filter(CircuitBreakerFilterFunctions.
                             circuitBreaker("inventoryServiceCircuitBreaker", URI.
-                                    create("forward:/fallbackRoute")))
+                                    create("forward:/fallbackInventory")))
                     .build();
         }
 
     @Bean
-    public RouterFunction<ServerResponse> fallbackRoute() {
-        return GatewayRouterFunctions.route("fallbackRoute")
-                .GET("/fallbackRoute", request ->
+    public RouterFunction<ServerResponse> fallbackRoutes() {
+        return GatewayRouterFunctions.route("fallbackRoutes")
+                .GET("/fallbackProduct", request ->
                         ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE)
-                                .body("Service currently not available, try again later!")).build();
+                                .body("Product Service is currently unavailable, please try again later!"))
+                .GET("/fallbackOrder", request ->
+                        ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE)
+                                .body("Order Service is currently unavailable, please try again later!"))
+                .GET("/fallbackInventory", request ->
+                        ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE)
+                                .body("Inventory Service is currently unavailable, please try again later!"))
+                .build();
     }
+
 
     @Bean
         public RouterFunction<ServerResponse> swaggerRoutes() {
