@@ -24,3 +24,30 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      inventoryService:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5000ms
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+
+  retry:
+    instances:
+      inventoryService:
+        maxAttempts: 3
+        waitDuration: 1s
+        retryExceptions:
+          - java.io.IOException
+          - org.springframework.web.client.HttpServerErrorException
+        ignoreExceptions:
+          - java.lang.IllegalArgumentException
+
+  ratelimiter:
+    instances:
+      inventoryService:
+        limitForPeriod: 5
+        limitRefreshPeriod: 1s
+        timeoutDuration: 500ms
