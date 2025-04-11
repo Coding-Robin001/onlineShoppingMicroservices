@@ -7,9 +7,42 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: Adewole171200
-#      MYSQL_DATABASE: order_service_schema
+      MYSQL_DATABASE: order_service_schema
     ports:
       - "3306:3306"
+    networks:
+      - microservice-net
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
+      KAFKA_LISTENER_NAME_INTERNAL: INSIDE
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093
+      KAFKA_LISTENER_INTER_BROKER_PROTOCOL: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_NAME_EXTERNAL: OUTSIDE
+      KAFKA_ADVERTISED_LISTENER: OUTSIDE://localhost:9092
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
+      KAFKA_LISTENER_NAME_INTERNAL: INSIDE
+      KAFKA_LISTENER_INTER_BROKER_PROTOCOL: INSIDE
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    networks:
+      - microservice-net
+
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
     networks:
       - microservice-net
 
