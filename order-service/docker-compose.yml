@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-order-service
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Adewole171200
+#      MYSQL_DATABASE: order_service_schema
+    ports:
+      - "3306:3306"
+    networks:
+      - microservice-net
+
+networks:
+  microservice-net:
+    driver: bridge
