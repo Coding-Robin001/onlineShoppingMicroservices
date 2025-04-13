@@ -3,8 +3,12 @@ package com.robin.microservices.order_service.service;
 import com.robin.microservices.order_service.client.InventoryClient;
 import com.robin.microservices.order_service.dto.OrderRequestDTO;
 import com.robin.microservices.order_service.dto.OrderResponseDTO;
+import com.robin.microservices.order_service.event.OrderPlacedEvent;
 import com.robin.microservices.order_service.model.OrderModel;
 import com.robin.microservices.order_service.repository.OrderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,12 +17,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
     private final OrderRepository orderRepository;
     private final InventoryClient inventoryClient;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
-    public OrderService(OrderRepository orderRepository, InventoryClient inventoryClient) {
+    public OrderService(OrderRepository orderRepository, InventoryClient inventoryClient, KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate) {
         this.orderRepository = orderRepository;
         this.inventoryClient = inventoryClient;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO){
@@ -33,6 +40,10 @@ public class OrderService {
             order.setQuantity(orderRequestDTO.quantity());
 
             orderRepository.save(order);
+            OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent(order.getOrderNumber(), order.getPrice());
+            log.info("start - sending orderPlacedEvent to kafka topic order-placed ", orderPlacedEvent);
+            kafkaTemplate.send("order-placed", orderPlacedEvent);
+            log.info("end - sending orderPlacedEvent to kafka topic order-placed ", orderPlacedEvent);
             return new OrderResponseDTO(
                     order.getId(),
                     order.getOrderNumber(),
@@ -41,7 +52,7 @@ public class OrderService {
                     order.getQuantity()
             );
         } else {
-            throw new RuntimeException("product with skuCode " + orderRequestDTO.skuCode() + " is not in stock");
+            throw new RuntimeException("product ith skuCode " + orderRequestDTO.skuCode() + " is not in stock");
         }
     }
 
