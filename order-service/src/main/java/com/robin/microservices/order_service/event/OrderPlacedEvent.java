@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 
 public class OrderPlacedEvent {
     private String orderNumber;
-    private BigDecimal orderPrice;
+    private String email;
 
     public OrderPlacedEvent() {
     }
 
-    public OrderPlacedEvent(String orderNumber, BigDecimal orderPrice) {
-        this.orderPrice = orderPrice;
+    public OrderPlacedEvent(String orderNumber, String email) {
+        this.email = email;
         this.orderNumber = orderNumber;
     }
 
@@ -22,11 +22,11 @@ public class OrderPlacedEvent {
         this.orderNumber = orderNumber;
     }
 
-    public BigDecimal getOrderPrice() {
-        return orderPrice;
+    public String getEmail() {
+        return email;
     }
 
-    public void setOrderPrice(BigDecimal orderPrice) {
-        this.orderPrice = orderPrice;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

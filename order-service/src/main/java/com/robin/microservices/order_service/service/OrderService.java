@@ -40,7 +40,7 @@ public class OrderService {
             order.setQuantity(orderRequestDTO.quantity());
 
             orderRepository.save(order);
-            OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent(order.getOrderNumber(), order.getPrice());
+            OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent(order.getOrderNumber(), orderRequestDTO.userDetails().email());
             log.info("start - sending orderPlacedEvent to kafka topic order-placed ", orderPlacedEvent);
             kafkaTemplate.send("order-placed", orderPlacedEvent);
             log.info("end - sending orderPlacedEvent to kafka topic order-placed ", orderPlacedEvent);
