@@ -1,6 +1,7 @@
 package com.robin.microservices.notification_service.service;
 
-import com.robin.microservices.notification_service.placeOrder.OrderPlacedEvent;
+import com.robin.microservices.notification_service.event.OrderPlacedEvent;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

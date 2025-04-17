@@ -1,4 +1,4 @@
-package com.robin.microservices.notification_service.placeOrder;
+package com.robin.microservices.notification_service.event;
 
 
 import lombok.AllArgsConstructor;

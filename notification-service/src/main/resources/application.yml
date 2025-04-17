@@ -6,10 +6,10 @@ spring:
     name: notification-service
 
     mail:
-      host:
-      port:
-      username:
-      password:
+      host: sandbox.smtp.mailtrap.io
+      port: 2525
+      username: 521c4c12434e4d
+      password: 098bd92a7f6d81
 
   kafka:
     bootstrap-servers: localhost:9092
@@ -18,4 +18,9 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       #      value-deserializer: org.apache.kafka.common.serialization.StringSerializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            type:
+              mapping: event:com.robin.microservices.order_service.event.OrderPlacedEvent
 
