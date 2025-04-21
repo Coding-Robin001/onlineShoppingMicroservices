@@ -40,7 +40,11 @@ public class OrderService {
             order.setQuantity(orderRequestDTO.quantity());
 
             orderRepository.save(order);
-            OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent(order.getOrderNumber(), orderRequestDTO.userDetails().email());
+            OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent();
+            orderPlacedEvent.setOrderNumber(order.getOrderNumber());
+            orderPlacedEvent.setEmail(orderRequestDTO.userDetails().email());
+            orderPlacedEvent.setFirstName(orderRequestDTO.userDetails().firstName());
+            orderPlacedEvent.setLastName((orderRequestDTO.userDetails().lastName()));
             log.info("start - sending orderPlacedEvent to kafka topic order-placed ",
                     orderPlacedEvent);
             kafkaTemplate.send("order-placed", orderPlacedEvent);
@@ -57,7 +61,6 @@ public class OrderService {
             throw new RuntimeException("product with skuCode " + orderRequestDTO.skuCode() + " is not in stock");
         }
     }
-
 
         public List<OrderResponseDTO> getAllOrders() {
             List<OrderModel> orders = orderRepository.findAll();
