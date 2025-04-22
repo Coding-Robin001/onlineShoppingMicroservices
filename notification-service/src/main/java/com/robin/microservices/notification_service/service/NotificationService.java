@@ -1,7 +1,6 @@
 package com.robin.microservices.notification_service.service;
 
-import com.robin.microservices.notification_service.event.OrderPlacedEvent;
-
+import com.robin.microservices.order_service.event.OrderPlacedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -25,16 +24,20 @@ public class NotificationService {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
             helper.setFrom("robinSpringShop@email.com");
-            helper.setTo(orderPlacedEvent.getEmail());
+            helper.setTo(orderPlacedEvent.getEmail().toString());
             helper.setSubject(String.format("Your order with order number %s was placed successfully", orderPlacedEvent.getOrderNumber()));
             helper.setText(String.format("""
-                    Hi,
+                    Hi, %s %s
+                    
 
                     Your order with order number %s was placed successfully.
 
                     Best regards,
                     RobinSpring Shop
-                    """, orderPlacedEvent.getOrderNumber()));
+                    """,
+                    orderPlacedEvent.getFirstName().toString();
+                    orderPlacedEvent.getLastName().toString();
+                    orderPlacedEvent.getOrderNumber()));
         };
 
         try {
