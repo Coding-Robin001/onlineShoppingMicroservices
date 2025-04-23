@@ -35,8 +35,8 @@ public class NotificationService {
                     Best regards,
                     RobinSpring Shop
                     """,
-                    orderPlacedEvent.getFirstName().toString();
-                    orderPlacedEvent.getLastName().toString();
+                    orderPlacedEvent.getFirstName().toString(),
+                    orderPlacedEvent.getLastName().toString(),
                     orderPlacedEvent.getOrderNumber()));
         };
 

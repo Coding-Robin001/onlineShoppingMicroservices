@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: Adewole171200
-#      MYSQL_DATABASE: order_service_schema
+    #      MYSQL_DATABASE: order_service_schema
     ports:
       - "3306:3306"
     networks:
@@ -26,7 +26,7 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:7.0.1
-    container_name: kafka-broker
+    container_name: kafka
     depends_on:
       - zookeeper
     ports:
@@ -44,13 +44,25 @@ services:
     image: confluentinc/cp-schema-registry:7.0.1
     container_name: schema-registry
     depends_on:
-      - kafka-broker
+      - kafka
     ports:
       - "8081:8081"
     environment:
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka-broker:9092
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
+    networks:
+      - microservice-net
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    environment:
+      KAFKA_CLUSTERS_0_NAME: "local"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka-broker:9092"
+      KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper:2181"
+    ports:
+      - "8090:8090"
     networks:
       - microservice-net
 
