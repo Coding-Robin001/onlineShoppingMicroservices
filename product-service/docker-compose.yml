@@ -9,6 +9,7 @@ services:
       MYSQL_ROOT_PASSWORD: Adewole171200
       MYSQL_DATABASE: product_service_schema
     ports:
-      - "3306:3306"
-    networks:
-      - microservice-net
+      - "3307:3307"
+#    networks:
+#      - product-microservice-net
+#
