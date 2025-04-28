@@ -1,6 +1,8 @@
+version: '3'
+
 services:
   loki:
-    image: grafana/loki:2.9.3  # Use a stable version, not "main"
+    image: grafana/loki:2.9.3
     container_name: loki
     command: [ "-config.file=/etc/loki/local-config.yaml" ]
     ports:
@@ -8,3 +10,15 @@ services:
     volumes:
       - ./loki-config.yaml:/etc/loki/local-config.yaml  # (optional) custom config
     restart: unless-stopped  # (optional) auto-restart if crashed
+
+  prometheus:
+    image: prom/prometheus:v2.46.0
+    container_name: prometheus
+    command:
+      - --enable-feature=exemplar-storage
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro  # Ensure this file is configured properly
+    ports:
+      - "9090:9090"
+    restart: unless-stopped  # optional: restart on failure
