@@ -16,21 +16,6 @@ swagger:
     order: "http://localhost:8084/v3/api-docs"
     inventory: "http://localhost:8085/v3/api-docs"
 
-#springdoc:
-#  api-docs:
-#    enabled: true
-#    path: "/api-docs"
-#  swagger-ui:
-#    enabled: true
-#    path: "/swagger-ui"
-#    urls:
-#      - name: "Order Service"
-#        url: "http://localhost:8084/v3/api-docs"
-#      - name: "Product Service"
-#        url: "http://localhost:8083/v3/api-docs"
-#      - name: "Inventory Service"
-#        url: "http://localhost:8085/v3/api-docs"
-
 springdoc:
   api-docs:
     enabled: true

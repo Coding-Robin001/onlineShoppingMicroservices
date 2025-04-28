@@ -1,0 +1,10 @@
+services:
+  loki:
+    image: grafana/loki:2.9.3  # Use a stable version, not "main"
+    container_name: loki
+    command: [ "-config.file=/etc/loki/local-config.yaml" ]
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki-config.yaml:/etc/loki/local-config.yaml  # (optional) custom config
+    restart: unless-stopped  # (optional) auto-restart if crashed
