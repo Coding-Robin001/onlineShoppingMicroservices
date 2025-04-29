@@ -22,3 +22,13 @@ services:
     ports:
       - "9090:9090"
     restart: unless-stopped  # optional: restart on failure
+  tempo:
+    image: grafana/tempo:2.2.2
+    container_name: tempo
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./docker/tempo/tempo.yml:/etc/tempo.yaml:ro
+      - ./data/tempo:/tmp/tempo
+    ports:
+      - "3110:3100"  # Tempo
+      - "9411:9411" # zipkin
