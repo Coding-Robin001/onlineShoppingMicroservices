@@ -1,14 +1,12 @@
-
 services:
   loki:
     image: grafana/loki:2.9.3
     container_name: loki
-    command: [ "-config.file=/etc/loki/loki-config.yaml" ]
     ports:
       - "3100:3100"
     volumes:
-      - ./docker/loki/loki-config.yaml:/etc/loki/loki-config.yaml:ro  # (optional) custom config
-    restart: unless-stopped  # (optional) auto-restart if crashed
+      - ./docker/loki/loki-config.yaml:/etc/loki/local-config.yaml
+    restart: unless-stopped  # optional: auto-restart if crashed
 
   prometheus:
     image: prom/prometheus:v2.46.0
@@ -21,6 +19,7 @@ services:
     ports:
       - "9090:9090"
     restart: unless-stopped  # optional: restart on failure
+
   tempo:
     image: grafana/tempo:2.2.2
     container_name: tempo
@@ -31,6 +30,7 @@ services:
     ports:
       - "3110:3100"  # Tempo
       - "9411:9411" # zipkin
+  
   grafana:
     image: grafana/grafana:10.1.0
     container_name: grafana
