@@ -25,3 +25,33 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
+
+
+management:
+  observation:
+    key-values:
+      application: product-service
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true  # Enable histogram for these metrics
+    export:
+      prometheus:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+
+loki:
+  url: http://localhost:3100/loki/api/v1/push
