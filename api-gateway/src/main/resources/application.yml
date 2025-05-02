@@ -32,18 +32,39 @@ springdoc:
         url: "/api-docs/inventory"
 
 
-
 management:
+  observation:
+    key-values:
+      application: api-gateway
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true  # Enable histogram for these metrics
+    export:
+      prometheus:
+        enabled: true
   health:
     circuitbreakers:
       enabled: true
   endpoints:
     web:
       exposure:
-        include: health
+        include:
+        - health
+        - info
+        - metrics
+        - prometheus
   endpoint:
+    prometheus:
+      enabled: true
     health:
       show-details: always
+  tracing:
+    sampling:
+      probability: 1.0
+
+loki:
+  url: http://localhost:3100/loki/api/v1/push
 
 
 resilience4j:
