@@ -25,7 +25,6 @@ spring:
       properties:
         schema.registry.url: http://localhost:8081
 
-
 springdoc:
   api-docs:
     enabled: true
@@ -60,3 +59,33 @@ resilience4j:
         limitForPeriod: 5
         limitRefreshPeriod: 1s
         timeoutDuration: 500ms
+
+management:
+  observation:
+    key-values:
+      application: product-service
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true  # Enable histogram for these metrics
+    export:
+      prometheus:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+
+loki:
+  url: http://localhost:3100/loki/api/v1/push
+
