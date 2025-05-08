@@ -10,6 +10,12 @@ gateway:
     order: "http://localhost:8084"
     inventory: "http://localhost:8085"
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:14082/realms/---
+
 swagger:
   routes:
     product: "http://localhost:8083/v3/api-docs"
