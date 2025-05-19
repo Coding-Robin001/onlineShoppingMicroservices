@@ -14,7 +14,7 @@ gateway:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:14082/realms/---
+          issuer-uri: http://localhost:8181/realms/OnlineShoppingMicroservices-realm
 
 swagger:
   routes:
