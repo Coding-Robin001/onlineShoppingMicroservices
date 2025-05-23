@@ -23,8 +23,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/cart").hasAuthority("ROLE_regular-role")
-                        .requestMatchers("/orders").hasAuthority("ROLE_admin-role")
+                        .requestMatchers("/api/product/**").permitAll()
+                        .requestMatchers("/api/order").hasAuthority("ROLE_regular-role")
+                        .requestMatchers("/api/inventory").hasAuthority("ROLE_admin-role")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
@@ -33,6 +34,21 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+
+//    DISBALED AUTH FOR TESTING PURPOSE
+//    DISBALED AUTH FOR TESTING PURPOSES
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeHttpRequests(auth -> auth
+//                        .anyRequest().permitAll() // ✅ Allow all requests
+//                )
+//                .csrf(csrf -> csrf.disable())
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+//
+//        return http.build();
+//    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
